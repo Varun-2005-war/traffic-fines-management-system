@@ -1,0 +1,14 @@
+.env
+key.pem
+cert.pem
+traffic.db
+sqlite_backup.json
+app_backup.py
+app_before_supabase.py
+app_sqlite_backup.py
+import_supabase.py
+extract_templates.py
+flask_error.txt
+flask_supabase_error.txt
+__pycache__/
+*.pyc

@@ -1,0 +1,98 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Officer Login - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="login-wrapper">
+
+    <div class="card login-card">
+
+        <div class="login-icon">
+            🚦
+        </div>
+
+        <h2>Officer Login</h2>
+
+        <p class="muted">
+            Sign in to access the Traffic Fines Management System.
+        </p>
+
+        <form method="post">
+
+            <input
+                type="hidden"
+                name="_csrf"
+                value="{{ csrf }}"
+            >
+
+            <div class="form-group">
+
+                <label for="username">
+                    👤 Username
+                </label>
+
+                <input
+                    id="username"
+                    name="username"
+                    type="text"
+                    autocomplete="username"
+                    placeholder="Enter username"
+                    required
+                    autofocus
+                >
+
+            </div>
+
+            <div class="form-group">
+
+                <label for="password">
+                    🔒 Password
+                </label>
+
+                <input
+                    id="password"
+                    name="password"
+                    type="password"
+                    autocomplete="current-password"
+                    placeholder="Enter password"
+                    required
+                >
+
+            </div>
+
+            <button type="submit" class="btn btn-danger" style="width:100%;">
+                🔐 Sign In
+            </button>
+
+        </form>
+
+        <div class="alert alert-warning" style="margin-top:20px;">
+
+            <strong>Demo Accounts</strong>
+
+            <br><br>
+
+            👮 Officer:
+            <code>officer / officer123</code>
+
+            <br>
+
+            🛡️ Admin:
+            <code>admin / admin123</code>
+
+        </div>
+
+        <div style="text-align:center;margin-top:18px;">
+
+            <a href="/lookup">
+                🔎 Check My Fines
+            </a>
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

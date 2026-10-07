@@ -1,0 +1,7 @@
+{% extends 'base.html' %}{% block body %}<div class=card><h2>Fine receipt</h2>
+<p class=big>{{c.challan_no}} <span class="badge {{c.status}}">{{c.status}}</span></p>
+<table><tr><th>Vehicle<td>{{c.vehicle_no}}<tr><th>Owner<td>{{c.owner_name}}<tr><th>Violation<td>{{c.violation_name}}
+<tr><th>Fine<td><b>₹{{c.fine_amount}}</b><tr><th>Location<td>{{c.location}}<tr><th>Officer<td>{{c.officer}}
+<tr><th>Issued<td>{{c.created_at}}{% if c.paid_at %}<tr><th>Paid<td>{{c.paid_at}}{% endif %}</table></div>
+<div class=noprint>{% if c.status=='PENDING' %}<form method=post action="/pay/{{c.challan_no}}"><input type=hidden name=_csrf value="{{csrf}}"><button style="background:var(--ok)">Mark as paid</button></form><br>{% endif %}
+<button onclick="print()">🖨 Print receipt</button></div>{% endblock %}

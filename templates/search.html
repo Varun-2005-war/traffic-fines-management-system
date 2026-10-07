@@ -1,0 +1,103 @@
+{% extends 'base.html' %}
+
+{% block title %}Search - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="card">
+
+    <div class="dashboard-header">
+        <div>
+            <h2>?? Search Vehicle</h2>
+            <p class="muted">Find traffic violations using the vehicle number.</p>
+        </div>
+    </div>
+
+    <form method="get" action="/search">
+
+        <div class="form-group">
+
+            <label for="vehicle">Vehicle Number</label>
+
+            <input
+                type="text"
+                id="vehicle"
+                name="v"
+                value="{{ v }}"
+                placeholder="AP31AB1234"
+                autocapitalize="characters"
+                autocomplete="off"
+                required
+            >
+
+        </div>
+
+        <button type="submit" class="btn">
+            ?? Search Vehicle
+        </button>
+
+        <a href="/records" class="btn">
+            ?? All Records
+        </a>
+
+    </form>
+
+</div>
+
+
+{% if tot %}
+
+<div class="cards">
+
+    <div class="card stat-card">
+        <span class="stat-label">?? Total Fine</span>
+        <strong>?{{ tot.total }}</strong>
+    </div>
+
+    <div class="card stat-card">
+        <span class="stat-label">? Paid</span>
+        <strong>?{{ tot.paid }}</strong>
+    </div>
+
+    <div class="card stat-card">
+        <span class="stat-label">? Pending</span>
+        <strong>?{{ tot.pending }}</strong>
+    </div>
+
+</div>
+
+
+<div class="card">
+
+    <div class="dashboard-header">
+
+        <div>
+            <h2>?? Violation History</h2>
+            <p class="muted">
+                Results for vehicle:
+                <strong>{{ v }}</strong>
+            </p>
+        </div>
+
+    </div>
+
+    {% if rows %}
+
+        <div class="table-wrap">
+            {% include "rows.html" %}
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-warning">
+            No violation records found for this vehicle.
+        </div>
+
+    {% endif %}
+
+</div>
+
+{% endif %}
+
+{% endblock %}
+

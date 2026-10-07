@@ -1,0 +1,111 @@
+﻿{% extends "base.html" %}
+
+{% block title %}Dashboard - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="dashboard-header">
+    <div>
+        <h1>Traffic Management Dashboard</h1>
+        <p>Monitor violations, fines and payment activity.</p>
+    </div>
+</div>
+
+<div class="stats stat-grid">
+
+    <div class="stat-card">
+        <h3>Total Violations</h3>
+        <strong>{{ total }}</strong>
+        <p>All recorded violations</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Pending Fines</h3>
+        <strong>{{ pending }}</strong>
+        <p>Awaiting payment</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Paid Fines</h3>
+        <strong>{{ paid }}</strong>
+        <p>Successfully completed</p>
+    </div>
+
+    <div class="stat-card">
+        <h3>Total Fine Amount</h3>
+        <strong>Rs. {{ total_amount }}</strong>
+        <p>Total recorded value</p>
+    </div>
+
+</div>
+
+<div class="card">
+    <h2>Quick Actions</h2>
+    <p>Access frequently used traffic management functions.</p>
+
+    <div class="quick-actions">
+        <a class="btn" href="{{ url_for('new') }}">
+            + New Violation
+        </a>
+
+        <a class="btn btn-secondary" href="{{ url_for('records') }}">
+            View Records
+        </a>
+
+        <a class="btn btn-secondary" href="{{ url_for('search') }}">
+            Search Vehicle
+        </a>
+
+        <a class="btn btn-secondary" href="{{ url_for('rules_page') }}">
+            Traffic Rules
+        </a>
+
+        {% if session.get('role') == 'admin' %}
+        <a class="btn btn-secondary" href="{{ url_for('audit') }}">
+            Audit Logs
+        </a>
+        {% endif %}
+    </div>
+</div>
+
+<div class="card">
+    <h2>System Overview</h2>
+
+    <div class="overview-grid">
+
+        <div class="overview-item">
+            <span class="overview-icon">🚔</span>
+            <div>
+                <strong>Traffic Enforcement</strong>
+                <p>Record and manage traffic violations.</p>
+            </div>
+        </div>
+
+        <div class="overview-item">
+            <span class="overview-icon">💳</span>
+            <div>
+                <strong>Fine Management</strong>
+                <p>Track pending and completed payments.</p>
+            </div>
+        </div>
+
+        <div class="overview-item">
+            <span class="overview-icon">🔎</span>
+            <div>
+                <strong>Vehicle Search</strong>
+                <p>Quickly find a vehicle's violation history.</p>
+            </div>
+        </div>
+
+        <div class="overview-item">
+            <span class="overview-icon">📋</span>
+            <div>
+                <strong>Traffic Rules</strong>
+                <p>View available violations and fine amounts.</p>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+{% endblock %}

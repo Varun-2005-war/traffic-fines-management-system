@@ -1,0 +1,4 @@
+{% macro table(rows) %}<table class=resp><thead><tr><th>Challan<th>Vehicle<th>Violation<th>Fine<th>Status<th>Time</tr></thead><tbody>
+{% for r in rows %}<tr><td data-l=Challan><a href="/c/{{r.challan_no}}">{{r.challan_no}}</a><td data-l=Vehicle>{{r.vehicle_no}}
+<td data-l=Violation>{{r.violation_name}}<td data-l=Fine>₹{{r.fine_amount}}<td data-l=Status><span class="badge {{r.status}}">{{r.status}}</span><td data-l=Time>{{r.created_at}}</tr>
+{% else %}<tr><td colspan=6 class=muted>No records</tr>{% endfor %}</tbody></table>{% endmacro %}

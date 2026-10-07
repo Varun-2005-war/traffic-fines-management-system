@@ -1,0 +1,92 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Fine Rules - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="card">
+
+    <div class="dashboard-header">
+        <div>
+            <h2>📖 Traffic Fine Rules</h2>
+            <p class="muted">
+                View the applicable fines for different traffic violations.
+            </p>
+        </div>
+
+        <a href="/new" class="btn btn-danger">
+            ➕ Issue Challan
+        </a>
+    </div>
+
+    <div class="table-wrap">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Violation</th>
+                    <th>Fine Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+
+                {% for k, v in rules.items() %}
+
+                <tr>
+                    <td>
+                        <span class="badge">{{ k }}</span>
+                    </td>
+
+                    <td>
+                        <strong>{{ v[0] }}</strong>
+                    </td>
+
+                    <td>
+                        <strong>₹{{ v[1] }}</strong>
+                    </td>
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    <div class="alert alert-warning" style="margin-top:20px;">
+
+        <strong>⚠️ Repeat Offence:</strong>
+
+        Repeat offence of the same violation within
+        <strong>12 months</strong> may result in a
+        <strong>50% additional fine</strong>.
+
+    </div>
+
+</div>
+
+
+<div class="cards">
+
+    <div class="card stat-card">
+        <span class="stat-label">📖 Total Rules</span>
+        <strong>{{ rules|length }}</strong>
+    </div>
+
+    <div class="card stat-card">
+        <span class="stat-label">🔄 Repeat Offence</span>
+        <strong>+50%</strong>
+    </div>
+
+    <div class="card stat-card">
+        <span class="stat-label">📅 Validity</span>
+        <strong>12 Months</strong>
+    </div>
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,99 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Audit Log - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="card">
+
+    <div class="dashboard-header">
+
+        <div>
+            <h2>🛡️ Audit Log</h2>
+            <p class="muted">
+                Administrative activity and system actions.
+            </p>
+        </div>
+
+        <a href="/" class="btn">
+            🏠 Dashboard
+        </a>
+
+    </div>
+
+
+    {% if rows %}
+
+    <div class="table-wrap">
+
+        <table class="resp">
+
+            <thead>
+
+                <tr>
+                    <th>🕐 When</th>
+                    <th>👤 Who</th>
+                    <th>⚙️ Action</th>
+                    <th>📝 Detail</th>
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                {% for r in rows %}
+
+                <tr>
+
+                    <td data-l="When">
+                        {{ r.at }}
+                    </td>
+
+                    <td data-l="Who">
+                        <strong>{{ r.who }}</strong>
+                    </td>
+
+                    <td data-l="Action">
+                        <span class="badge">
+                            {{ r.action }}
+                        </span>
+                    </td>
+
+                    <td data-l="Detail">
+                        {{ r.detail }}
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+    {% else %}
+
+    <div class="alert alert-success">
+        ✅ No audit activity has been recorded yet.
+    </div>
+
+    {% endif %}
+
+</div>
+
+
+<div class="card">
+
+    <h3>🔐 Admin Information</h3>
+
+    <p class="muted" style="margin-top:8px;">
+        The audit log records important system activities performed
+        by authenticated users. This section is available only to
+        administrators.
+    </p>
+
+</div>
+
+{% endblock %}

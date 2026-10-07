@@ -1,0 +1,62 @@
+﻿{% extends 'base.html' %}
+
+{% from 'rows.html' import table %}
+
+{% block title %}Records - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="records-page">
+
+    <div class="records-header">
+
+        <div>
+            <span class="page-label">TRAFFIC MANAGEMENT</span>
+            <h1>Traffic Records</h1>
+            <p>View, monitor and manage recorded traffic violations.</p>
+        </div>
+
+        <a href="{{ url_for('new') }}" class="btn btn-danger">
+            + New Violation
+        </a>
+
+    </div>
+
+    <div class="records-filters">
+
+        <a href="{{ url_for('records') }}" class="filter-btn active">
+            All Records
+        </a>
+
+        <a href="{{ url_for('records') }}?status=PENDING" class="filter-btn pending-filter">
+            Pending
+        </a>
+
+        <a href="{{ url_for('records') }}?status=PAID" class="filter-btn paid-filter">
+            Paid
+        </a>
+
+        <a href="{{ url_for('search') }}" class="filter-btn">
+            Search Vehicle
+        </a>
+
+    </div>
+
+    <div class="records-card">
+
+        <div class="records-card-header">
+            <div>
+                <h2>Violation History</h2>
+                <p>All recorded traffic violation entries</p>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            {{ table(rows) }}
+        </div>
+
+    </div>
+
+</div>
+
+{% endblock %}

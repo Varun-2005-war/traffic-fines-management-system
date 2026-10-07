@@ -1,0 +1,273 @@
+{% extends "base.html" %}
+
+{% block title %}New Violation - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="page-header">
+    <h1>Record New Violation</h1>
+    <p>Enter vehicle and violation details to create a traffic fine.</p>
+</div>
+
+<form method="POST" class="violation-form">
+
+    <input type="hidden" name="_csrf" value="{{ csrf }}">
+    <input type="hidden" name="client_uuid" value="{{ f.get('client_uuid', '') }}">
+
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-step">1</div>
+            <div>
+                <h2>Vehicle Information</h2>
+                <p>Enter the vehicle owner's details.</p>
+            </div>
+        </div>
+
+        <div class="form-grid">
+
+            <div class="field full-width">
+                <label for="veh">Vehicle Number</label>
+
+                <div class="vehicle-input-row">
+                    <input
+                        type="text"
+                        name="vehicle_no"
+                        id="veh"
+                        value="{{ f.get('vehicle_no', '') }}"
+                        placeholder="AP31AB1234"
+                        autocomplete="off"
+                        required
+                    >
+
+                    <button
+                        type="button"
+                        class="btn camera-btn"
+                        onclick="openScanner('veh')"
+                    >
+                        Scan
+                    </button>
+                </div>
+
+                <small>Enter manually or scan the number plate.</small>
+            </div>
+
+            <div class="field">
+                <label for="owner">Owner Name</label>
+                <input
+                    type="text"
+                    name="owner_name"
+                    id="owner"
+                    value="{{ f.get('owner', '') }}"
+                    placeholder="Enter owner name"
+                    required
+                >
+            </div>
+
+            <div class="field">
+                <label for="phone">Phone Number</label>
+                <input
+                    type="tel"
+                    name="phone"
+                    id="phone"
+                    value="{{ f.get('phone', '') }}"
+                    placeholder="10-digit mobile number"
+                >
+            </div>
+
+        </div>
+
+    </div>
+
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-step">2</div>
+            <div>
+                <h2>Violation Details</h2>
+                <p>Select the traffic rule that was violated.</p>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="vc">Violation Type</label>
+
+            <select name="violation_code" id="vc" required onchange="upd()">
+                <option value="">Select a violation</option>
+
+                {% for code, rule in rules.items() %}
+                <option
+                    value="{{ code }}"
+                    {% if f.get('violation_code') == code %}selected{% endif %}
+                >
+                    {{ code }} - {{ rule[0] }}
+                </option>
+                {% endfor %}
+            </select>
+        </div>
+
+        <div class="fine-preview">
+            <div>
+                <span>Fine Amount</span>
+                <strong id="fine">Rs. 0</strong>
+            </div>
+
+            <div>
+                <span>Status</span>
+                <strong id="rep">New Violation</strong>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="form-card">
+
+        <div class="form-card-header">
+            <div class="form-step">3</div>
+            <div>
+                <h2>Location & Notes</h2>
+                <p>Add the violation location and additional information.</p>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="location">Location</label>
+
+            <div class="location-row">
+                <input
+                    type="text"
+                    name="location"
+                    id="location"
+                    value="{{ f.get('location', '') }}"
+                    placeholder="Enter violation location"
+                >
+
+                <button type="button" class="btn btn-secondary" onclick="getGPS()">
+                    GPS
+                </button>
+            </div>
+        </div>
+
+        <div class="field">
+            <label for="gps">GPS Coordinates</label>
+            <input
+                type="text"
+                name="gps"
+                id="gps"
+                value="{{ f.get('gps', '') }}"
+                placeholder="Latitude, Longitude"
+                readonly
+            >
+        </div>
+
+        <div class="field">
+            <label for="notes">Additional Notes</label>
+
+            <textarea
+                name="notes"
+                id="notes"
+                placeholder="Add any additional information..."
+            >{{ f.get('notes', '') }}</textarea>
+        </div>
+
+    </div>
+
+    <div class="submit-card">
+
+        <div>
+            <strong>Ready to submit?</strong>
+            <p>Check all information before creating the fine.</p>
+        </div>
+
+        <button type="submit" class="btn btn-success submit-btn">
+            Create Traffic Fine
+        </button>
+
+    </div>
+
+</form>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+async function upd() {
+    const code = document.getElementById("vc").value;
+    const vehicle = document.getElementById("veh").value;
+
+    const fine = document.getElementById("fine");
+    const rep = document.getElementById("rep");
+
+    if (!code) {
+        fine.textContent = "Rs. 0";
+        rep.textContent = "New Violation";
+        return;
+    }
+
+    try {
+        const response = await fetch(
+            "/api/fine?code=" +
+            encodeURIComponent(code) +
+            "&vehicle=" +
+            encodeURIComponent(vehicle)
+        );
+
+        const data = await response.json();
+
+        fine.textContent = "Rs. " + (data.fine || 0);
+
+        if (data.repeat) {
+            rep.textContent = "Repeat Violation";
+        } else {
+            rep.textContent = "New Violation";
+        }
+
+    } catch (error) {
+        console.error(error);
+        fine.textContent = "Unable to calculate";
+    }
+}
+
+function getGPS() {
+    const gpsField = document.getElementById("gps");
+    const locationField = document.getElementById("location");
+
+    if (!navigator.geolocation) {
+        alert("GPS is not supported by this browser.");
+        return;
+    }
+
+    gpsField.value = "Getting location...";
+
+    navigator.geolocation.getCurrentPosition(
+        function(position) {
+            const lat = position.coords.latitude.toFixed(6);
+            const lon = position.coords.longitude.toFixed(6);
+
+            gpsField.value = lat + ", " + lon;
+
+            if (!locationField.value) {
+                locationField.value = "GPS Location";
+            }
+        },
+        function(error) {
+            gpsField.value = "";
+            alert("Unable to get GPS location. Please allow location access.");
+        },
+        {
+            enableHighAccuracy: true,
+            timeout: 10000,
+            maximumAge: 0
+        }
+    );
+}
+
+document.addEventListener("DOMContentLoaded", function() {
+    upd();
+});
+</script>
+
+{% endblock %}
+
+

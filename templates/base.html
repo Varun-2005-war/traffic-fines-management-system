@@ -1,0 +1,121 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Traffic Fines{% endblock %}</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    {% block head %}{% endblock %}
+</head>
+
+<body>
+
+<nav class="navbar">
+    <div class="nav-brand">
+        Traffic Fines
+    </div>
+
+    <div class="nav-links">
+        <a href="{{ url_for('dashboard') }}">Dashboard</a>
+        <a href="{{ url_for('new') }}">New Violation</a>
+        <a href="{{ url_for('records') }}">Records</a>
+        <a href="{{ url_for('search') }}">Search</a>
+        <a href="{{ url_for('rules_page') }}">Rules</a>
+
+        {% if session.get('role') == 'admin' %}
+        <a href="{{ url_for('audit') }}">Audit</a>
+        {% endif %}
+
+        {% if session.get('user') %}
+        <a href="{{ url_for('logout') }}">Logout</a>
+        {% endif %}
+    </div>
+</nav>
+
+<main class="container">
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert {{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    {% block body %}{% endblock %}
+
+</main>
+
+<div class="tabbar">
+    <a href="{{ url_for('dashboard') }}">Home</a>
+    <a href="{{ url_for('new') }}">New</a>
+    <a href="{{ url_for('records') }}">Records</a>
+    <a href="{{ url_for('search') }}">Search</a>
+</div>
+
+<div id="scannerModal" class="scanner-modal">
+
+    <div class="scanner-box">
+
+        <div class="scanner-header">
+            <h3>Scan Number Plate</h3>
+
+            <button
+                type="button"
+                class="scanner-close"
+                onclick="closeScanner()">
+                X
+            </button>
+        </div>
+
+        <div class="scanner-camera">
+            <video
+                id="scannerVideo"
+                autoplay
+                playsinline>
+            </video>
+
+            <div class="scanner-frame"></div>
+        </div>
+
+        <canvas
+            id="scannerCanvas"
+            style="display:none;">
+        </canvas>
+
+        <p id="scannerResult" class="scanner-result">
+            Position the number plate inside the frame.
+        </p>
+
+        <button
+            type="button"
+            class="btn scanner-capture"
+            onclick="capturePlate()">
+            Capture and Read
+        </button>
+
+        <button
+            type="button"
+            class="btn btn-danger scanner-cancel"
+            onclick="closeScanner()">
+            Cancel
+        </button>
+
+    </div>
+
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+
+<script src="{{ url_for('static', filename='js/scanner.js') }}"></script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>
+
+

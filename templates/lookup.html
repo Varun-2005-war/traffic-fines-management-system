@@ -1,0 +1,110 @@
+﻿{% extends 'base.html' %}
+
+{% block title %}Check My Fines - Traffic Fines{% endblock %}
+
+{% block body %}
+
+<div class="card">
+
+    <div class="dashboard-header">
+        <div>
+            <h2>🔎 Check My Fines</h2>
+            <p class="muted">
+                Enter your vehicle number to view recorded traffic violations.
+            </p>
+        </div>
+
+        <a href="/login" class="btn">
+            👮 Officer Login
+        </a>
+    </div>
+
+    <form method="get" action="/lookup">
+
+        <div class="form-group">
+
+            <label for="vehicle">
+                🚗 Vehicle Number
+            </label>
+
+            <input
+                id="vehicle"
+                name="v"
+                value="{{ v }}"
+                placeholder="AP31AB1234"
+                autocapitalize="characters"
+                autocomplete="off"
+                required
+            >
+
+        </div>
+
+        <button type="submit" class="btn btn-danger">
+            🔍 Check Fines
+        </button>
+
+    </form>
+
+</div>
+
+
+{% if v %}
+
+<div class="card">
+
+    <div class="dashboard-header">
+
+        <div>
+            <h2>📋 Violation History</h2>
+
+            <p class="muted">
+                Vehicle:
+                <strong>{{ v }}</strong>
+            </p>
+        </div>
+
+    </div>
+
+    {% if rows %}
+
+        <div class="table-wrap">
+            {{ table(rows) }}
+        </div>
+
+    {% else %}
+
+        <div class="alert alert-success">
+            ✅ No traffic violations found for
+            <strong>{{ v }}</strong>.
+        </div>
+
+    {% endif %}
+
+    <div class="alert alert-warning" style="margin-top:20px;">
+
+        <strong>💳 Payment Information</strong>
+
+        <p style="margin-top:8px;">
+            Pay pending fines at your nearest traffic station.
+            Online payment is not enabled in this prototype.
+        </p>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+
+<div class="card">
+
+    <h3>ℹ️ About Public Lookup</h3>
+
+    <p class="muted" style="margin-top:8px;">
+        This public service allows vehicle owners to view their
+        recorded traffic violations without signing in as an officer.
+    </p>
+
+</div>
+
+{% endblock %}
